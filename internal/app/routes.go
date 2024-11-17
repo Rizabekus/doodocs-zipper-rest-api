@@ -15,15 +15,15 @@ func Routes(h *handlers.Handlers) {
 	r := mux.NewRouter()
 	r.HandleFunc("api/archive/information", h.GetArchiveInfo).Methods("POST")
 	r.HandleFunc("api/archive/files", h.CreateArchive).Methods("POST")
-	r.HandleFunc("api/archive/file", h.EmailArchive).Methods("POST")
+	r.HandleFunc("api/archive/mail", h.EmailArchive).Methods("POST")
 	file, line, _ := utils.GetCallerInfo()
 	loggers.InfoLog(file, line, "Started the server")
 	defer loggers.CloseLogFile()
 	log.Fatal(http.ListenAndServe(os.Getenv("PORT"), r))
 }
 
-//Расписать роуты
-//Разобраться с миграциями
-//Сваггер
-//Запустить на рендер ком
-//Записать видео
+// Расписать роуты
+// Тесты
+// Сваггер
+// Запустить на рендер ком
+// Записать видео

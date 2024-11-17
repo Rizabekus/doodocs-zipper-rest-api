@@ -1,0 +1,2 @@
+[INFO] [2024-11-17 18:21:33] (run.go:19) - Loaded the configuration data from .env
+[INFO] [2024-11-17 18:21:33] (routes.go:19) - Started the server

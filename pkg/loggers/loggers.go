@@ -9,10 +9,12 @@ import (
 	easy "github.com/t-tomalak/logrus-easy-formatter"
 )
 
-var Log1 *logrus.Logger
-var Log2 *logrus.Logger
-var Log3 *logrus.Logger
-var f *os.File
+var (
+	Log1 *logrus.Logger
+	Log2 *logrus.Logger
+	Log3 *logrus.Logger
+	f    *os.File
+)
 
 func InitLoggers() {
 	f, err := os.OpenFile("logs/all.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
@@ -47,14 +49,24 @@ func InitLoggers() {
 		},
 	}
 }
+
 func InfoLog(file string, line int, msg string) {
-	split := strings.Split(strings.Split(file, ":")[1], "/")
+	tmp := strings.Split(file, ":")
+	var fsplit string
+	if len(tmp) == 1 {
+		fsplit = tmp[0]
+	} else {
+		fsplit = tmp[1]
+	}
+
+	split := strings.Split(fsplit, "/")
 	file = split[len(split)-1]
 	Log1.WithFields(logrus.Fields{
 		"file": file,
 		"line": line,
 	}).Info(msg)
 }
+
 func DebugLog(file string, line int, method string, path string, status_code int, ip_address string, content_type string, user_agent string, msg string) {
 	split := strings.Split(strings.Split(file, ":")[1], "/")
 	file = split[len(split)-1]
@@ -69,6 +81,7 @@ func DebugLog(file string, line int, method string, path string, status_code int
 		"user_agent":   user_agent,
 	}).Debug(msg)
 }
+
 func ErrorLog(file string, line int, method string, path string, status_code int, ip_address string, content_type string, user_agent string, err string, msg string) {
 	split := strings.Split(strings.Split(file, ":")[1], "/")
 	file = split[len(split)-1]
@@ -84,6 +97,7 @@ func ErrorLog(file string, line int, method string, path string, status_code int
 		"error":        err,
 	}).Error(msg)
 }
+
 func CloseLogFile() error {
 	if f != nil {
 		err := f.Close()
