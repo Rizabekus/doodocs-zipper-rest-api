@@ -2,7 +2,6 @@ package loggers
 
 import (
 	"io"
-	"log"
 	"os"
 	"strings"
 
@@ -52,15 +51,8 @@ func InitLoggers() {
 }
 
 func InfoLog(file string, line int, msg string) {
-	tmp := strings.Split(file, ":")
-	var fsplit string
-	if len(tmp) == 1 {
-		fsplit = tmp[0]
-	} else {
-		fsplit = tmp[1]
-	}
 
-	split := strings.Split(fsplit, "/")
+	split := strings.Split(file, "/")
 	file = split[len(split)-1]
 	Log1.WithFields(logrus.Fields{
 		"file": file,
@@ -69,8 +61,8 @@ func InfoLog(file string, line int, msg string) {
 }
 
 func DebugLog(file string, line int, method string, path string, status_code int, ip_address string, content_type string, user_agent string, msg string) {
-	log.Println(file)
-	split := strings.Split(strings.Split(file, ":")[1], "/")
+
+	split := strings.Split(file, "/")
 
 	file = split[len(split)-1]
 	content_type = strings.Split(content_type, ";")[0]
@@ -87,7 +79,8 @@ func DebugLog(file string, line int, method string, path string, status_code int
 }
 
 func ErrorLog(file string, line int, method string, path string, status_code int, ip_address string, content_type string, user_agent string, err string, msg string) {
-	split := strings.Split(strings.Split(file, ":")[1], "/")
+	split := strings.Split(file, "/")
+
 	file = split[len(split)-1]
 	content_type = strings.Split(content_type, ";")[0]
 	Log2.WithFields(logrus.Fields{
