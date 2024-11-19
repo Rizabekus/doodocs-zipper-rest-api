@@ -23,7 +23,7 @@ func (handler *Handlers) EmailArchive(w http.ResponseWriter, r *http.Request) {
 	file, fileHeader, err := r.FormFile("file")
 	if err != nil {
 		file, line, _ := utils.GetCallerInfo()
-		loggers.ErrorLog(file, line+1, r.Method, r.URL.Path, http.StatusBadRequest, strings.Split(r.RemoteAddr, ":")[0], r.Header.Get("Content-Type"), r.Header.Get("User-Agent"), err.Error(), "Failed to unmarshal JSON")
+		loggers.ErrorLog(file, line+1, r.Method, r.URL.Path, http.StatusBadRequest, strings.Split(r.RemoteAddr, ":")[0], r.Header.Get("Content-Type"), r.Header.Get("User-Agent"), err.Error(), "File is required")
 		utils.SendResponse("File is required", w, http.StatusBadRequest)
 		return
 	}
@@ -36,7 +36,7 @@ func (handler *Handlers) EmailArchive(w http.ResponseWriter, r *http.Request) {
 	mimeType := fileHeader.Header.Get("Content-Type")
 	if !allowedMIMETypes[mimeType] {
 		file, line, _ := utils.GetCallerInfo()
-		loggers.ErrorLog(file, line+1, r.Method, r.URL.Path, http.StatusBadRequest, strings.Split(r.RemoteAddr, ":")[0], r.Header.Get("Content-Type"), r.Header.Get("User-Agent"), err.Error(), "Failed to unmarshal JSON")
+		loggers.ErrorLog(file, line+1, r.Method, r.URL.Path, http.StatusBadRequest, strings.Split(r.RemoteAddr, ":")[0], r.Header.Get("Content-Type"), r.Header.Get("User-Agent"), "Wrong MIME type", "Wrong MIME type")
 		utils.SendResponse("Unsupported file type", w, http.StatusBadRequest)
 		return
 	}
@@ -44,7 +44,7 @@ func (handler *Handlers) EmailArchive(w http.ResponseWriter, r *http.Request) {
 	emails := r.FormValue("emails")
 	if emails == "" {
 		file, line, _ := utils.GetCallerInfo()
-		loggers.ErrorLog(file, line+1, r.Method, r.URL.Path, http.StatusBadRequest, strings.Split(r.RemoteAddr, ":")[0], r.Header.Get("Content-Type"), r.Header.Get("User-Agent"), err.Error(), "Failed to unmarshal JSON")
+		loggers.ErrorLog(file, line+1, r.Method, r.URL.Path, http.StatusBadRequest, strings.Split(r.RemoteAddr, ":")[0], r.Header.Get("Content-Type"), r.Header.Get("User-Agent"), "No emails", "No emails")
 		utils.SendResponse("Emails are required", w, http.StatusBadRequest)
 		return
 	}
@@ -57,14 +57,14 @@ func (handler *Handlers) EmailArchive(w http.ResponseWriter, r *http.Request) {
 	_, err = io.Copy(&fileBuffer, file)
 	if err != nil {
 		file, line, _ := utils.GetCallerInfo()
-		loggers.ErrorLog(file, line+1, r.Method, r.URL.Path, http.StatusInternalServerError, strings.Split(r.RemoteAddr, ":")[0], r.Header.Get("Content-Type"), r.Header.Get("User-Agent"), err.Error(), "Failed to unmarshal JSON")
+		loggers.ErrorLog(file, line+1, r.Method, r.URL.Path, http.StatusInternalServerError, strings.Split(r.RemoteAddr, ":")[0], r.Header.Get("Content-Type"), r.Header.Get("User-Agent"), err.Error(), "Internal Server Error")
 		utils.SendResponse("Internal Server Error", w, http.StatusInternalServerError)
 		return
 	}
 	err = utils.SendEmail(emailList, fileHeader.Filename, fileBuffer.Bytes())
 	if err != nil {
 		file, line, _ := utils.GetCallerInfo()
-		loggers.ErrorLog(file, line+1, r.Method, r.URL.Path, http.StatusInternalServerError, strings.Split(r.RemoteAddr, ":")[0], r.Header.Get("Content-Type"), r.Header.Get("User-Agent"), err.Error(), "Failed to unmarshal JSON")
+		loggers.ErrorLog(file, line+1, r.Method, r.URL.Path, http.StatusInternalServerError, strings.Split(r.RemoteAddr, ":")[0], r.Header.Get("Content-Type"), r.Header.Get("User-Agent"), err.Error(), "Internal Server Error")
 		utils.SendResponse("Internal Server Error", w, http.StatusInternalServerError)
 		return
 	}
