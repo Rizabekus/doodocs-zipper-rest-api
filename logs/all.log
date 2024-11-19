@@ -36,3 +36,11 @@
 [DEBUG] [POST] [2024-11-18 06:31:26] (getarchiveinfo.go:55) - Successfully retrieved inforamtion | Path: /api/archive/information | Status Code: 200 | IP Address: [ | Content Type: multipart/form-data; boundary=--------------------------564449055437641189259138 | User Agent: PostmanRuntime/7.37.3 
 [DEBUG] [POST] [2024-11-18 06:31:47] (getarchiveinfo.go:55) - Successfully retrieved inforamtion | Path: /api/archive/information | Status Code: 200 | IP Address: [ | Content Type: multipart/form-data; boundary=--------------------------253684465454302862290500 | User Agent: PostmanRuntime/7.37.3 
 [DEBUG] [POST] [2024-11-18 06:31:57] (getarchiveinfo.go:55) - Successfully retrieved inforamtion | Path: /api/archive/information | Status Code: 200 | IP Address: [ | Content Type: multipart/form-data; boundary=--------------------------367951636605305180175503 | User Agent: PostmanRuntime/7.37.3 
+[INFO] [2024-11-18 22:14:12] (run.go:19) - Loaded the configuration data from .env
+[INFO] [2024-11-18 22:14:12] (routes.go:19) - Started the server
+[INFO] [2024-11-18 22:20:36] (run.go:19) - Loaded the configuration data from .env
+[INFO] [2024-11-18 22:20:36] (routes.go:19) - Started the server
+[ERROR] [POST] [2024-11-18 22:20:45] (emailarchive.go:67) - Failed to unmarshal JSON | Path: /api/archive/mail | Status Code: 500 | IP Address: [ | Content Type: multipart/form-data; boundary=--------------------------563019957485978607065246 | User Agent: PostmanRuntime/7.37.3 | Error: failed to send email: 534 5.7.9 Application-specific password required. For more information, go to
+5.7.9  https://support.google.com/mail/?p=InvalidSecondFactor ffacd0b85a97d-3821ada3fc9sm13222026f8f.20 - gsmtp 
+[INFO] [2024-11-18 22:27:20] (run.go:19) - Loaded the configuration data from .env
+[INFO] [2024-11-18 22:27:20] (routes.go:19) - Started the server

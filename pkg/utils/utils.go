@@ -1,10 +1,17 @@
 package utils
 
 import (
+	"bytes"
 	"encoding/json"
-	"github.com/Rizabekus/doodocs-zipper-rest-api/internal/models"
+	"errors"
+	"fmt"
+	"io"
 	"net/http"
+	"os"
 	"runtime"
+
+	"github.com/Rizabekus/doodocs-zipper-rest-api/internal/models"
+	"gopkg.in/gomail.v2"
 )
 
 func GetCallerInfo() (string, int, string) {
@@ -33,4 +40,34 @@ func SendResponse(msg string, w http.ResponseWriter, statusCode int) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
 	w.Write(responseJSON)
+}
+func SendEmail(to []string, filename string, fileData []byte) error {
+
+	fromEmail := os.Getenv("SMTP_EMAIL")
+	fromPassword := os.Getenv("SMTP_PASSWORD")
+	smtpHost := "smtp.gmail.com"
+	smtpPort := 587
+
+	if fromEmail == "" || fromPassword == "" {
+		return errors.New("SMTP credentials are not set")
+	}
+
+	msg := gomail.NewMessage()
+	msg.SetHeader("From", fromEmail)
+	msg.SetHeader("To", to...)
+	msg.SetHeader("Subject", "File delivery")
+	msg.SetBody("text/plain", "Please find the attached file.")
+
+	fileReader := bytes.NewReader(fileData)
+	msg.Attach(filename, gomail.SetCopyFunc(func(w io.Writer) error {
+		_, err := io.Copy(w, fileReader)
+		return err
+	}))
+
+	dialer := gomail.NewDialer(smtpHost, smtpPort, fromEmail, fromPassword)
+	if err := dialer.DialAndSend(msg); err != nil {
+		return fmt.Errorf("failed to send email: %w", err)
+	}
+
+	return nil
 }
