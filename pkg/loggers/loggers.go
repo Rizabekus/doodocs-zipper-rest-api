@@ -69,8 +69,9 @@ func InfoLog(file string, line int, msg string) {
 }
 
 func DebugLog(file string, line int, method string, path string, status_code int, ip_address string, content_type string, user_agent string, msg string) {
-	split := strings.Split(strings.Split(file, ":")[1], "/")
 	log.Println(file)
+	split := strings.Split(strings.Split(file, ":")[1], "/")
+
 	file = split[len(split)-1]
 	content_type = strings.Split(content_type, ";")[0]
 	Log3.WithFields(logrus.Fields{
